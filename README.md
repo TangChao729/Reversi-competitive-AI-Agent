@@ -1,6 +1,4 @@
-Welcome to the comp90054-a3-reversi-ai wiki!
-
-# UoM COMP90054 Contest Project
+# Competitive AI - A reversi AI agent
 
 ## Table of content
 1. [Home and Introduction]()
