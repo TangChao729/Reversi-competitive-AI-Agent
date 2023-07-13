@@ -6,7 +6,7 @@ from Reversi.reversi_model import ReversiGameRule
 from copy import deepcopy
 
 #  python general_game_runner.py -a agents.t_032.new_MCTS,agents.t_032.ziyuan -m 10 -q
-# python general_game_runner.py -a agents.t_032.git_new,agents.t_032.git_change -t -p
+# python general_game_runner.py -a agents.t_032.new_MCTS,agents.t_032.myTeam -t -p
 
 
 class TreeNode():
@@ -30,6 +30,17 @@ class myAgent(Agent):
         self.game_rule = ReversiGameRule(2)
         self.start_time = None
         self.time_limit = 0.9
+
+        self.position_weight = [
+            [80, -25, 10, 5, 5, 10, -25, 80],
+            [-25, -45, 1, 1, 1, 1, -45, -25],
+            [10, 1, 3, 2, 2, 3, 1, 10],
+            [5, 1, 2, 1, 1, 2, 1, 5],
+            [5, 1, 2, 1, 1, 2, 1, 5],
+            [10, 1, 3, 2, 2, 3, 1, 10],
+            [-25, -45, 1, 1, 1, 1, -45, -25],
+            [80, -25, 10, 5, 5, 10, -25, 80]
+        ]
 
         self.hard_code = [
             [(0, 0), (7, 0), (0, 7), (7, 7)],
@@ -159,10 +170,8 @@ class myAgent(Agent):
         return best_move
 
     def MCTS(self, game_state):
-        count = 0
         root = TreeNode(None, None, self.id)
         while time.time() - self.start_time < self.time_limit:
-            count += 1
             deepcopy_board = deepcopy(game_state)
 
             # Select
@@ -190,7 +199,63 @@ class myAgent(Agent):
 
             # back propagation
             self.BackPropagation(choice, propagation_score)
+
         return self.FindSolution(root)
+
+    def MiniMax(self, state, agent_id, alpha, beta, depth):
+
+        if depth == 3 or self.GameEnd(state) or time.time() - self.start_time >= self.time_limit:
+            return None, - self.CalculateWeight(state, agent_id)
+
+        action_list = self.GetActionList(state, agent_id)
+        best_action = None
+
+        # If the self.id equal to the current agent id - max
+        if agent_id == self.id:
+            max_value = float('-inf')
+            for action in action_list:
+
+                new_state = self.ExecuteAction(state, action, agent_id)
+                _act, value = self.MiniMax(new_state, 1 - agent_id, alpha, beta, depth + 1)
+
+                if value > max_value:
+                    max_value = value
+                    best_action = action
+
+                alpha = max(alpha, value)
+
+                if beta <= alpha:
+                    return best_action, max_value
+
+            return best_action, max_value
+
+        # If self.id not equal to the current agent id - min
+        elif agent_id != self.id:
+            min_value = float('inf')
+            for action in action_list:
+                new_state = self.ExecuteAction(state, action, agent_id)
+                _act, value = self.MiniMax(new_state, 1 - agent_id, alpha, beta, depth + 1)
+
+                if value < min_value:
+                    min_value = value
+                    best_action = action
+
+                beta = min(beta, value)
+
+                if beta <= alpha:
+                    return best_action, min_value
+
+            return best_action, min_value
+
+    def CalculateWeight(self, game_state, agent_id):
+        score = 0
+        for i in range(len(self.position_weight)):
+            for j in range(len(self.position_weight)):
+                if game_state.board[i][j] == self.color[agent_id]:
+                    score = score + self.position_weight[i][j]
+                elif game_state.board[i][j] == self.color[1 - agent_id]:
+                    score = score - self.position_weight[i][j]
+        return score
 
     def SelectAction(self, actions, game_state):
         # The move numbers of current agent on the current board
@@ -206,6 +271,20 @@ class myAgent(Agent):
         if len(actions) == 1:
             return actions[0]
 
-        return self.MCTS(game_state_copy)
+        # Find whether the current action option contain the corner
+        corner_location = {(0, 0), (0, 7), (7, 0), (7, 7)}
+        corner_actions = list(set(actions).intersection(corner_location))
 
+        # If there is corner action and move <= 20, directly return the corner action
+        if self.selection_times <= 20 and len(corner_actions) > 0:
+            return random.choice(corner_actions)
+
+        # If number of move <= 10, using minimax
+        elif self.selection_times <= 10:
+            action, value = self.MiniMax(game_state_copy, self.id, float('-inf'), float('inf'), 0)
+            return action
+
+        # If number of move > 10 and there is no the corner options, using MCTS
+        else:
+            return self.MCTS(game_state_copy)
 
