@@ -2,17 +2,17 @@
 
 ## Table of content
 1. [Home and Introduction]()
-2. [Problem Analysis](Problem-Analysis)
+2. [Problem Analysis](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/Problem-Analysis.md)
 
-    2.1 [Method 1 - Breadth First Search](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/2.1-Method-1---Breadth-First-Search)
+    2.1 [Method 1 - Breadth First Search](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/2.1-Method-1---Breadth-First-Search.md)
 
-    2.2 [Method 2 - Minimax](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/2.2-AI-Method-2---Minimax)
+    2.2 [Method 2 - Minimax](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/2.2-AI-Method-2---Minimax.md)
 
-    2.3 [Method 3 - Monte Carlo Tree Search](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/2.3-Method-3---Monte-Carlo-Tree-Search)
+    2.3 [Method 3 - Monte Carlo Tree Search](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/2.3-Method-3---Monte-Carlo-Tree-Search.md)
 
-    2.4 [Method 4 - Monte Carlo Tree Search Plus Minimax](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/2.4-Method-4---Monte-Carlo-Tree-Search-Plus-Minimax)
-3. [Evolution and Experiments](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/3.-Evolution)
-4. [Conclusions and Reflections](https://github.com/COMP90054-2022S2/comp90054-a3-reversi-ai/wiki/4.-Conclusions-and-Reflections)
+    2.4 [Method 4 - Monte Carlo Tree Search Plus Minimax](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/2.4-Method-4---Monte-Carlo-Tree-Search-Plus-Minimax.md)
+3. [Evolution and Experiments](https://github.com/TangChao729/Reversi_AI/blob/main/Wiki/4.-Conclusions-and-Reflections.md)
+4. [Conclusions and Reflections]()
 
 ## Introduction
 The purpose of this project is to implement the AI agent for reversi game by using the AI-Technical learned from the COMP90054. After analysing the challenges of the reversi game and comparing the different AI-Technical, the team determined to implement the AI agent for reversi game by using the BFS, MCTS and Minimax. Our final approach is to combine the MCTS and the Minimax to further improve the performance in the Tournament.
